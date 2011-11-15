@@ -79,6 +79,12 @@ class Hand:
 	def diff(self, cards):
 		return sorted(set(self.cards) - set(cards))
 
+	def ranks(self):
+		return [c.rank for c in self.cards]
+
+	def suits(self):
+		return [c.suit for c in self.cards]
+
 
 class HandPenalties:
 	""" Pentalities that get calculated per subhand, used in a HandPattern """
@@ -114,7 +120,7 @@ class HandPenalties:
 
 		discard = hand.diff(subhand)
 
-		if self.straight != None and self.any_count != None
+		if self.straight != None and self.any_count != None:
 			st = self.straight_penalties(subhand, discard)
 
 		if self.flush != None and self.any_count != None:
@@ -150,21 +156,19 @@ class HandFilters:
 
 	@staticmethod
 	def flush(cards):
-		suit = cards[0].suit
-		for c in cards:
-			if c.suit != suit:
-				return False
-		return True
+		return 1 == len(set(Hand(cards).suits()))
 
 	@staticmethod
 	def straight(cards, to=None):
-		prev = cards[0].rank
-		for i in range(1, len(cards) - 1):
-			if cards[i].rank != prev + 1:
+		prevrank = cards[0].rank
+		for i in range(1, len(cards)):
+			if cards[i].rank != prevrank + 1:
 				return False
-			prev = cards[i].rank
+			prevrank = cards[i].rank
+
 		if to:
-			return to == cards[len(cards) - 1].rank
+			return to == cards[-1].rank
+
 		return True
 
 	@staticmethod
@@ -175,18 +179,19 @@ class HandFilters:
 	def open_straight(cards):
 		if not HandFilters.straight(cards):
 			return False
-		if 14 in (cards[0].rank, cards[len(cards) - 1].rank):
+		if 14 in (cards[0].rank, cards[-1].rank):
 			return False
 		return True
 
 	@staticmethod
-	def inside_straight(cards):
-		holes = 0
-		prevrank = cards[0].rank
-		for i in range(1, len(cards) - 1):
-			holes += cards[i].rank - prevrank - 1
-			prevrank = cards[i].rank
-		return holes <= 1
+	def inside_straight(cards, holes=1):
+		holes_found = 0
+		ranks = Hand(cards).ranks()
+		prev_rank = ranks[0]
+		for i in range(1, len(ranks)):
+			holes_found += ranks[i] - prev_rank - 1
+			prev_rank = ranks[i]
+		return holes_found == holes
 
 	@staticmethod
 	def ofakind(cards, count=2, ranks=None):
@@ -225,11 +230,15 @@ class HandFilters:
 
 	@staticmethod
 	def contains(cards, ranks_set):
-		return 0 < len(set(ranks_set) & set([c.rank for c in cards]))
+		return len(ranks_set) < len(set(ranks_set) & set([c.rank for c in cards]))
 
 	@staticmethod
 	def contains_multi(cards, ranks_sets):
 		return 0 < len(filter(lambda rs: HandFilters.contains(cards, rs), ranks_sets))
+
+	@staticmethod
+	def doesnt_contain(cards, ranks_set):
+		return 0 >= len(set(ranks_set) & set([c.rank for c in cards]))
 
 class HandPattern:
 	""" A pattern definition to be applied to a Hand """
@@ -259,7 +268,7 @@ class HandPattern:
 
 		for fn in self.filters:
 			if self.debug:
-				print "Applying filter", fn.__name__
+				print "Applying filter", fn
 			subhands = filter(fn, subhands)
 			if self.debug:
 				print "New Subhands:"
@@ -270,26 +279,41 @@ class HandPattern:
 
 		return subhands
 
-		
-class PokerGame:
+
+class VideoPokerGame:
 	""" Definition of the video poker game up for evaluation """
+	num_cards = 0
+	patterns = ()
+
+	def best_plays(self, hand):
+		if len(hand) != self.num_cards:
+			raise ValueError("Game requires %d cards, %d received" % (self.num_cards, len(hand)))
+
+		play_list = []
+		for p in self.patterns:
+			m = p.matches(hand)
+			if len(m) > 0:
+				play_list.append((p, m))
+
+		return play_list
+
+		
+class DoubleBonusPoker(VideoPokerGame):
 
 	num_cards = 5
-
-	paytable = {}
 
 	patterns = (
 		HandPattern("Pat Royal Flush", filters=[partial(HandFilters.straight_flush, to=14)]),
 		HandPattern("Four of a Kind Aces", filters=[partial(HandFilters.ofakind, count=4, ranks=(14,))]),
 		HandPattern("Four of a Kind Twos, Threes, Fours", filters=[partial(HandFilters.ofakind, count=4, ranks=(2,3,4))]),
-		HandPattern("Four of a Kind Fives - Kings", filters=[partial(HandFilters.ofakind, count=4, ranks=range(5,13))]),
+		HandPattern("Four of a Kind Fives - Kings", filters=[partial(HandFilters.ofakind, count=4, ranks=range(5,13+1))]),
 		HandPattern("Pat Straight Flush", filters=[HandFilters.straight_flush]),
 		HandPattern("Royal Flush Draw", count=4, filters=[HandFilters.straight_flush]),
 		HandPattern("Three of a Kind Aces", filters=[partial(HandFilters.ofakind, count=3, ranks=(14,))]),
 		HandPattern("Pat Full House", filters=[partial(HandFilters.ofakind, count=3), partial(HandFilters.ofakind, count=2)]),
 		HandPattern("Pat Flush", filters=[HandFilters.flush]),
 		HandPattern("Three of a Kind Twos, Threes, Fours", filters=[partial(HandFilters.ofakind, count=3, ranks=(2,3,4))]), #   6.7105
-		HandPattern("Three of a Kind Fives - Kings", filters=[partial(HandFilters.ofakind, count=3, ranks=range(5,13))]), #   5.4339
+		HandPattern("Three of a Kind Fives - Kings", filters=[partial(HandFilters.ofakind, count=3, ranks=range(5,13+1))]), #   5.4339
 		HandPattern("Pat Straight", filters=[HandFilters.straight]), # 5.0000
 		HandPattern("Open Straight Flush Draw", count=4, filters=[HandFilters.open_straight, HandFilters.flush]), # 3.7383
 		HandPattern("Inside Straight Flush Draw", count=4, filters=[HandFilters.flush, HandFilters.inside_straight]), # 2.4894
@@ -347,50 +371,67 @@ class PokerGame:
 			penalties=HandPenalties(straight=1)), #  1.4450
 		HandPattern("Four to a Flush, 1 High Card", count=4, 
 			filters=[HandFilters.flush, partial(HandFilters.high_card, count=1)]), # 1.4042
-
-		# K-Q-T suited, K-J-T suited (w/ two penalties*)    1.3959
-		# A-K-Ts, A-Q-Ts, A-J-Ts(w/ no penalty*)    1.3663
-		# Four to a flush, No High Cards    1.3404
-		# A-K-Ts, A-Q-Ts, A-J-Ts (w/ one St. penalty*)  1.3395
-		# Open Four to a Straight   0.9149
-		# Pair of Twos, Threes, Fours   0.8266
-		# J-T-9 suited  0.7826
-		# Q-J-9 suited  0.7761
-		# Pair of Fives through Tens    0.7434
-		# Three to a Flush, One High Card   0.4598
-		# J-T suited (w/ three penalties*)  0.4588
-		# K-Q, K-J (w/ one Straight penalty*)   0.4574
-		# Ace (w/ no flush penalty*)    0.4552
-		# Ace (w/ one flush penalty + no 2, 3, 4 or 5)  0.4499
-		# A-K, A-Q, A-J     0.4493
-		# K-T suited    0.4487
-		# Ace (w/ one flush penalty*)   0.4487
-		# Jack (w/ no flush penalty*)   0.4451
-		# 3 to a St. Flush, 2 Gaps, 0 Hi Cards (St. penalty*)   0.4431
-		# Queen     0.4341
-		# King  0.4310
-		# Jack (w/ one Flush penalty*)  0.4306
-		# Four to a Straight, Inside, no High Cards     0.4255
-		# Three to a Flush, no High Cards   0.3608
+		HandPattern("K-Q-Ts, K-J-Ts (w/ two penalties)", count=3, 
+			filters=[partial(HandFilters.contains_multi, ranks_sets=((10,12,13),(10,11,13))), HandFilters.flush], 
+			penalties=HandPenalties(any_count=2)), #  1.3959
+		HandPattern("A-K-Ts, A-Q-Ts, A-J-Ts (w/ no penalty)", count=3, 
+			filters=[partial(HandFilters.contains_multi, ranks_sets=((10,13,14), (10,12,14), (10,11,14))), HandFilters.flush], 
+			penalties=HandPenalties(any_count=0)), #  1.3663
+		HandPattern("Four to a Flush, No High Card", count=4, 
+			filters=[HandFilters.flush, partial(HandFilters.high_card, count=0)]), # 1.3404
+		HandPattern("A-K-Ts, A-Q-Ts, A-J-Ts (w/ one straight penalty)", count=3, 
+			filters=[partial(HandFilters.contains_multi, ranks_sets=((10,13,14), (10,12,14), (10,11,14))), HandFilters.flush], 
+			penalties=HandPenalties(straight=1)), #  1.3395
+		HandPattern("Open Four to a Straight", count=4, 
+			filters=[HandFilters.open_straight]), # 0.9149
+		HandPattern("Pair of Twos, Threes, Fours",
+			filters=[partial(HandFilters.ofakind, count=2, ranks=(2,3,4))]), # 0.8266
+		HandPattern("J-T-9 suited", count=3,
+			filters=[partial(HandFilters.straight, to=11), HandFilters.flush]), #  0.7826
+		HandPattern("Q-J-9 suited", count=3,
+			filters=[partial(HandFilters.contains, ranks_set=(9,11,12)), HandFilters.flush]), #  0.7761
+		HandPattern("Pair of Fives - Tens",
+			filters=[partial(HandFilters.ofakind, count=2, ranks=range(5,10+1))]), # 0.7434
+		HandPattern("Three to a Flush, One High Card", count=3, 
+			filters=[HandFilters.flush, partial(HandFilters.high_card, count=1)]), #  0.4598
+		HandPattern("J-T suited (w/ three penalties)", count=2,
+			filters=[partial(HandFilters.contains, ranks_set=(10,11)), HandFilters.flush],
+			penalties=HandPenalties(any_count=3)), #  0.4588
+		HandPattern("K-Q, K-J (w/ one Straight penalty)", count=2,
+			filters=[partial(HandFilters.contains_multi, ranks_sets=((12,13),(11,13)))],
+			penalties=HandPenalties(straight=1)), #  0.4574
+		HandPattern("Ace (w/ no flush penalty)", count=1,
+			filters=[partial(HandFilters.contains, ranks_set=(14,))],
+			penalties=HandPenalties(flush=0)), #  0.4552
+		HandPattern("Ace (w/ one flush penalty, no 2, 3, 4 or 5)", count=1,
+			filters=[partial(HandFilters.contains, ranks_set=(14,)), partial(HandFilters.doesnt_contain, ranks_set=(2,3,4,5))],
+			penalties=HandPenalties(flush=1)), #  0.4499
+		HandPattern("A-K, A-Q, A-J", count=2,
+			filters=[partial(HandFilters.contains_multi, ranks_sets=((13,14),(12,14),(11,14)))]), # 0.4493
+		HandPattern("K-T suited", count=2,
+			filters=[partial(HandFilters.contains, ranks_set=(10,13)), HandFilters.flush]), # 0.4487
+		HandPattern("Ace (w/ one flush penalty)", count=1,
+			filters=[partial(HandFilters.contains, ranks_set=(14,))],
+			penalties=HandPenalties(flush=1)), #  0.4487
+		HandPattern("Jack (w/ no flush penalty)", count=1,
+			filters=[partial(HandFilters.contains, ranks_set=(11,))],
+			penalties=HandPenalties(flush=0)), #  0.4451
+		HandPattern("3 to a St. Flush, 2 Gaps, 0 Hi Cards (St. penalty)", count=3,
+			filters=[partial(HandFilters.high_card, count=0), HandFilters.flush, partial(HandFilters.inside_straight, holes=2)],
+			penalties=HandPenalties(straight=1)), #  0.4431
+		HandPattern("Queen", count=1, filters=[partial(HandFilters.contains, ranks_set=(12,))]), #  0.4341
+		HandPattern("King", count=1, filters=[partial(HandFilters.contains, ranks_set=(13,))]), #  0.4310
+		HandPattern("Jack (w/ one flush penalty)", count=1,
+			filters=[partial(HandFilters.contains, ranks_set=(11,))],
+			penalties=HandPenalties(flush=1)), #  0.4306
+		HandPattern("Four to an Inside Straight, no High Cards", count=4,
+			filters=[HandFilters.inside_straight, partial(HandFilters.high_card, count=0)]), # 0.4255
+		HandPattern("Three to a Flush, no High Cards", count=3,
+			filters=[HandFilters.flush, partial(HandFilters.high_card, count=0)]), # 0.3608
 		# Everything Else: Draw Five New Cards     0.3231
 	)
 
-	def __init__(self):
-		pass
 
-	
-	def best_plays(self, hand):
-		if len(hand) != self.num_cards:
-			raise ValueError("Game requires %d cards, %d received" % (self.num_cards, len(hand)))
-
-		play_list = []
-		for p in self.patterns:
-			print "Testing", p.id
-			m = p.matches(hand)
-			if len(m) > 0:
-				play_list.append((p, m))
-		return play_list
-		
 if __name__ == "__main__":
 	from pprint import pprint
 
@@ -411,8 +452,38 @@ if __name__ == "__main__":
 	print "Hand Combinations of 3 cards in h1:"
 	print "\n".join([str(Hand(cards)) for cards in h1.combinations(3)])
 
-	game = PokerGame()
-	print "Best Plays:"
-	for(p, m) in game.best_plays(h1):
-		print "Matched", p.id
-		pprint(m)
+
+	def play_hand(game, hand):
+		
+		plays = game.best_plays(hand)
+
+		print "=" * 80
+		print "Best Plays:"
+		for(p, m) in plays:
+			print "Matched", p.id
+			pprint(m)
+
+		(p, m) = plays[0]
+		discards = filter(lambda x: len(x), [hand.diff(x) for x in m])
+
+		print "=" * 80
+		print "For hand (%s), suggested play is '%s' of %d possible options." % (str(hand), p.id, len(plays))
+		if len(discards) > 0:
+			print "Discard", " or ".join([str(Hand(x)) for x in discards])
+
+	play_hand(DoubleBonusPoker(), Hand([
+		Card(5, Card.SPADE),
+		Card(6, Card.SPADE),
+		Card(7, Card.CLUB),
+		Card(8, Card.SPADE),
+		Card(14, Card.SPADE)
+	]))
+
+	play_hand(DoubleBonusPoker(), Hand([
+		Card(5, Card.SPADE),
+		Card(6, Card.HEART),
+		Card(7, Card.CLUB),
+		Card(9, Card.SPADE),
+		Card(14, Card.SPADE)
+	]))
+
