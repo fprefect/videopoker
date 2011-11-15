@@ -299,6 +299,7 @@ class VideoPokerGame:
 
 		
 class DoubleBonusPoker(VideoPokerGame):
+	""" Table from http://www.videopokerballer.com/strategy/double-bonus/ """
 
 	num_cards = 5
 
