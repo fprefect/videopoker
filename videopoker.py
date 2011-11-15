@@ -92,40 +92,46 @@ class HandPenalties:
 	def straight_penalties(self, subhand, remaing):
 		""" Straight (St.) penalty cards mean cards that interfere w/ a hand's possibility
 			of making a straight. """
+		# TODO: implement!
 		return 0
 
 	def flush_penalties(self, cards, discard):
 		""" Flush penalty cards mean cards that interfere w/ a hand's possibility of making a flush. """
-		if self.flush == None and self.any_count == None:
-			return 0
-
 		if not HandFilters.flush(cards):
 			return 0
 
-		suit = subhand[0].suit
+		suit = cards[0].suit
 		return len([1 for c in discard if c.suit == suit])
 
 	def high_pair_penalties(self, cards, discard):
 		""" High Pair (HP) penalty cards mean cards that interfere w/ a hand's possibility 
 			of making a high pair (a pair Jacks or better) """
-		if self.high_pair == None and self.any_count == None:
-			return 0
 		return HandFilters.high_card_count(discard)
 		
 	def match(self, hand, subhand):
+
+		st, fl, hp = 0, 0, 0
+
 		discard = hand.diff(subhand)
 
-		st = self.straight_penalties(subhand, discard)
-		fl = self.flush_penalties(subhand, discard)
-		hp = self.high_pair_penalties(subhand, discard)
+		if self.straight != None and self.any_count != None
+			st = self.straight_penalties(subhand, discard)
+
+		if self.flush != None and self.any_count != None:
+			fl = self.flush_penalties(subhand, discard)
+
+		if self.high_pair != None and self.any_count != None:
+			hp = self.high_pair_penalties(subhand, discard)
 
 		if self.any_count != None and self.any_count != (st + fl + hp):
 			return False
 
 		if self.straight != None and st != self.straight:
 			return False
+
 		if self.flush != None and fl != self.flush:
 			return False
+
 		if self.high_pair != None and hp != self.high_pair:
 			return False
 
