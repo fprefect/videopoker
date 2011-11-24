@@ -1,0 +1,93 @@
+Pat Royal Flush 	800.0000 	Th-Jh-Qh-Kh-Ah
+Four of a Kind Aces 	160.0000 	Ac-Ah-Ad-As-3c
+Four of a Kind Twos, Threes, Fours 	80.0000 	2h-2s-2c-2d-7c
+Four of a Kind Fives - Kings 	50.0000 	7c-7d-7h-7s-Jc
+Pat Straight Flush 	50.0000 	6h-7h-8h-9h-Th
+Royal Flush Draw 	18.6383 	Th-Jh-Qh-Kh-4h
+Three of a Kind Aces 	10.1147 	Ac-Ad-Ah-Js-8c
+Pat Full House 	10.0000 	Ac-Ad-As-Js-Jc
+Pat Flush 	7.0000 	Ac-Jc-6c-5c-4c
+Three of a Kind Twos, Threes, Fours 	6.7105 	3c-3h-3d-8s-9s
+Three of a Kind Fives through Kings 	5.4339 	8c-8s-8d-9h-3d
+Pat Straight 	5.0000 	4c-5s-6h-7h-8h
+Open Straight Flush Draw 	3.7383 	4c-5c-6c-7c-Th
+Inside Straight Flush Draw 	2.4894 	Qs-Js-9s-8s-4c
+Two Pair 	1.7660 	3c-3s-4d-4h-Ac
+Pair of Aces 	1.7635 	Ac-Ad-Js-8c-5h
+Q-J-T suited (w/ no penalty*) 	1.5846 	Qh-Jh-Th-4d-3d
+K-Q-J suited (w/ no penalty*) 	1.5754 	Kh-Qh-Jh-4c-3c
+Q-J-T suited (w/ one Straight penalty*) 	1.5634 	Qh-Jh-Th-Kc-2c
+Q-J-T suited (w/ one High Pair penalty*) 	1.5430 	Qh-Jh-Th-Jc-4s
+K-Q-J suited (w/ one Straight penalty*) 	1.5384 	Kh-Qh-Jh-Tc-4c
+K-Q-J suited (w/ one High Pair penalty*) 	1.5365 	Kh-Qh-Jh-Js-3s
+Four to a Flush, 3 High Cards (w/ no penalty*) 	1.5319 	Ac-Jc-Tc-3h-2h
+Q-J-T suited (w/ one Flush penalty*) 	1.5264 	Qh-Jh-Th-4h-3c
+Four to a Flush, 3 High Cards (w/ 1 HP penalty*) 	1.5106 	Ac-Jc-Tc-3c-Th
+Q-J-T suited (w/ any two penalties*) 	1.4894 	Qs-Js-Ts-Kh-Jc
+K-Q-J suited (w/ any two penalties*) 	1.4783 	Kh-Qh-Jh-Jc-Ts
+K-Q-T suited, K-J-T suited (w/ no penalty*) 	1.4755 	Kh-Qh-Th-4c-3c
+Four to a Flush, 2 High Cards (w/ no penalty*) 	1.4681 	Kh-Jh-7h-5h-2c
+A-K-Qs, A-K-Js, A-Q-Js (w/ no penalty*) 	1.4662 	Ac-Kc-Jc-2h-3h
+Pair of Jacks, Queens, Kings 	1.4582 	Jc-Js-2h-4c-8s
+K-Q-Ts, K-J-Ts (w/ one Straight penalty*) 	1.4542 	Kh-Qh-Th-Jc-2c
+A-K-Qs, A-K-Js, A-Q-Js (w/ one Straight penalty*) 	1.4450 	Ac-Kc-Qc-Jh-2h
+Four to a Flush, One High Card 	1.4042 	Ac-8c-7c-3c-6h
+K-Q-T suited, K-J-T suited (w/ two penalties*) 	1.3959 	Kh-Qh-Th-Jc-Qc
+A-K-Ts, A-Q-Ts, A-J-Ts(w/ no penalty*) 	1.3663 	Ac-Kc-Tc-2h-3h
+Four to a flush, No High Cards 	1.3404 	9c-7c-4c-2c-8s
+A-K-Ts, A-Q-Ts, A-J-Ts (w/ one St. penalty*) 	1.3395 	Ac-Kc-Tc-Jh-2s
+Open Four to a Straight 	0.9149 	Jc-Ts-9h-8c-2h
+Pair of Twos, Threes, Fours 	0.8266 	2c-2h-7s-8c-Jh
+J-T-9 suited 	0.7826 	Jc-Tc-9c-4h-3h
+Q-J-9 suited 	0.7761 	Qc-Jc-9c-4h-3h
+Pair of Fives through Tens 	0.7434 	5c-5h-Js-8d-2h
+Three to a Straight Flush, Open, No High Cards 	0.6855 	4c-5c-6c-Th-9h
+A-K-Q-J 	0.6789 	Ac-Ks-Jh-Ts-3s
+Q-J-8 suited 	0.6644 	Qc-Jc-8c-6h-4h
+Q-T-9 suited, J-T-8 suited, J-9-8 suited 	0.6577 	Jc-9c-8c-4h-3h
+K-Q-9 suited, K-J-9 suited 	0.6512 	Kc-Qc-9c-4h-2h
+Four to a Straight, Inside, Three High Cards 	0.6170 	Qc-Js-Ts-8d-2h
+Q-J suited (w/ no or one penalty*) 	0.5871 	Qc-Jc-4h-8s-2h
+K-Q suited, K-J suited (w/ no penalty*) 	0.5845 	Kc-Qc-8s-4h-2s
+Q-J suited (w/ two penalties*) 	0.5772 	Qs-Js-Th-6c-4s
+3 to a St. Flush, 1 Gap, 0 Hi Cards (no penalty*) 	0.5726 	4h-5h-7h-9c-Tc
+A-Ks, A-Qs, A-Js (w/ no penalty*) 	0.5692 	Ac-Kc-6s-9d-2h
+3 to a St. Flush, 2 Gaps, 1 Hi Card (no penalty*) 	0.5671 	4h-6h-8h-Jc-2s
+K-Qs, K-Js (w/ one Flush penalty*) 	0.5650 	Ks-Qs-8s-6h-2h
+Q-J suited (w/ three penalties*) 	0.5650 	Qs-Js-Tc-8c-2s
+K-Qs, K-Js (w/ one or two Straight penalties*) 	0.5642 	Ks-Qs-Jc-9c-2h
+Three to a Flush, Two High Cards 	0.5606 	As-Js-3s-5c-9c
+A-Ks, A-Qs, A-Js (w/ one Straight penalty*) 	0.5596 	As-Ks-Tc-2h-6h
+K-Qs, K-Js (w/ 1 St. penalty + 1 Flush penalty*) 	0.5582 	Ks-Qs-Tc-6s-4d
+3 to a St. Flush, 1 Gap, 0 Hi Cards (St. penalty*) 	0.5578 	5h-6h-8h-9c-2s
+Four to a Straight, Inside, Two High Cards 	0.5532 	Qs-Jd-9c-8h-2s
+K-Qs, K-Js (w/ three penalties*) 	0.5515 	Ks-Qs-Th-Td-2s
+3 to a St. Flush, 2 Gaps, 1 High Card (St. penalty*) 	0.5486 	8h-Th-Qh-9c-2s
+K-Q-J 	0.5199 	Kh-Qs-Jc-4c-2h
+J-T suited (w/ no penalty*) 	0.5011 	Jc-Tc-6s-4d-2d
+Q-J-T 	0.4940 	Qc-Jd-Th-7s-2d
+Four to a Straight, Inside, One High Card 	0.4894 	Jc-Ts-9d-7h-2s
+J-T suited (w/ one Flush penalty*) 	0.4817 	Js-Ts-6s-4c-2h
+J-T suited (w/ one or two Straight penalties*) 	0.4747 	Js-Ts-8c-7c-2h
+Q-J 	0.4745 	Qc-Jh-7d-5c-2h
+9-7-5 suited, 9-6-5 suited 	0.4699 	9c-7c-5c-2h-3h
+Q-T suited (w/ no penalty*) 	0.4683 	Qc-Tc-7s-5h-2s
+3 to a St. Flush, 2 Gaps, 0 Hi Cards (no penalty*) 	0.4672 	5h-7h-9h-2d-3d
+J-Ts (w/ 1 Straight penalty + 1 Flush penalty*) 	0.4652 	Js-Ts-8c-2s-5h
+K-Q, K-J (w/ no penalty*) 	0.4623 	Ks-Qc-8h-5h-3d
+Three to a Flush, One High Card 	0.4598 	Js-8s-4s-3c-2c
+J-T suited (w/ three penalties*) 	0.4588 	Js-Ts-7c-Ad-2s
+K-Q, K-J (w/ one Straight penalty*) 	0.4574 	Kc-Qs-9d-5h-2c
+Ace (w/ no flush penalty*) 	0.4552 	Ad-Tc-7s-4s-2h
+Ace (w/ one flush penalty + no 2, 3, 4 or 5) 	0.4499 	Ah-9h-Jc-7s-6d
+A-K, A-Q, A-J 	0.4493 	Ac-Kh-9d-7c-4s
+K-T suited 	0.4487 	Kc-Tc-7s-5d-2d
+Ace (w/ one flush penalty*) 	0.4487 	Ah-Th-7s-5c-2d
+Jack (w/ no flush penalty*) 	0.4451 	Jd-9s-7c-4h-2h
+3 to a St. Flush, 2 Gaps, 0 Hi Cards (St. penalty*) 	0.4431 	4h-6h-8h-7c-Td
+Queen 	0.4341 	Qc-9d-7d-4s-2s
+King 	0.4310 	Kh-Ts-8d-5d-2c
+Jack (w/ one Flush penalty*) 	0.4306 	Jd-8d-5c-3s-2s
+Four to a Straight, Inside, no High Cards 	0.4255 	5d-6c-7s-9h-2d
+Three to a Flush, no High Cards 	0.3608 	Th-7h-5h-3s-2s
+Everything Else » Draw Five New Cards 	0.3231 	10s-8c-6d-4s-2h

@@ -1,0 +1,337 @@
+{
+	"name": "Double Bonus Poker 10/7",	
+	"strategy_url": "http://www.videopokerballer.com/strategy/double-bonus/",
+	"num_cards": 5,
+	
+	"patterns": [
+		{"name":"Pat Royal Flush", "pays": 800.000000, "test": ["Th","Jh","Qh","Kh","Ah"],
+			 "filters": [{"fn":"straight_flush", "to":14}] 
+		},
+		{"name":"Four of a Kind Aces", "pays": 160.000000, "test": ["Ac","Ah","Ad","As","3c"],
+			 "count": 4, "filters":[{"fn":"quads", "ranks":[14]}] 
+		},
+		{"name":"Four of a Kind Twos, Threes, Fours", "pays": 80.000000, "test": ["2h","2s","2c","2d","7c"],
+			 "count":4, "filters": [{"fn":"quads", "ranks":[2,3,4]}] 
+		},
+		{"name":"Four of a Kind Fives - Kings", "pays": 50.000000, "test": ["7c","7d","7h","7s","Jc"],
+			 "count":4, "filters":[{"fn":"quads", "ranks":[5,6,7,8,9,10,11,12,13,14]}] 
+		},
+		{"name":"Pat Straight Flush", "pays": 50.000000, "test": ["6h","7h","8h","9h","Th"],
+			"filters":["straight_flush"]
+		},
+		{"name":"Royal Flush Draw", "pays": 18.638300, "test": ["Th","Jh","Qh","Kh","4h"], "debug":true,
+			"count":4, "filters":["straight_flush", {"fn":"doesnt_contain", "ranks":[2,3,4,5,6,7,8,9]}]
+		},
+		{"name":"Three of a Kind Aces", "pays": 10.114700, "test": ["Ac","Ad","Ah","Js","8c"],
+			"count":3, "filters":[{"fn":"trips", "ranks":[14]}]
+		},
+		{"name":"Pat Full House", "pays": 10.000000, "test": ["Kc","Kd","Ks","Js","Jc"],
+			"filters":["pair", "trips"]
+		},
+		{"name":"Pat Flush", "pays": 7.000000, "test": ["Ac","Jc","6c","5c","4c"],
+			"filters":["flush"]
+		},
+		{"name":"Three of a Kind Twos, Threes, Fours", "pays": 6.710500, "test": ["3c","3h","3d","8s","9s"],
+			"filters":[{"fn":"trips", "ranks":[2,3,4]}]
+		},
+		{"name":"Three of a Kind Fives through Kings", "pays": 5.433900, "test": ["8c","8s","8d","9h","3d"],
+			"filters":[{"fn":"trips", "ranks":[5,6,7,8,9,10,11,12,13]}]
+		},
+		{"name":"Pat Straight", "pays": 5.000000, "test": ["4c","5s","6h","7h","8h"],
+			"filters":["straight"]
+		},
+		{"name":"Open Straight Flush Draw", "pays": 3.738300, "test": ["4c","5c","6c","7c","Th"],
+			"count":4, "filters":["straight_flush"]
+		},
+		{"name":"Inside Straight Flush Draw", "pays": 2.489400, "test": ["Qs","Js","9s","8s","4c"],
+			"count":4, "filters":["inside_straight"]
+		},
+		{"name":"Two Pair", "pays": 1.766000, "test": ["3c","3s","4d","4h","Ac"],
+			"filters":["twopair"]
+		},
+		{"name":"Pair of Aces", "pays": 1.763500, "test": ["Ac","Ad","Js","8c","5h"],
+			"filters":[{"fn":"pair", "ranks":[14]}]
+		},
+		{"name":"Q-J-T suited (w/ no penalty*)", "pays": 1.584600, "test": ["Qh","Jh","Th","4d","3d"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":12}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"K-Q-J suited (w/ no penalty*)", "pays": 1.575400, "test": ["Kh","Qh","Jh","4c","3c"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":13}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"Q-J-T suited (w/ one Straight penalty*)", "pays": 1.563400, "test": ["Qh","Jh","Th","Kc","2c"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":12}],
+			"penalties":{"straight":1}
+		},
+		{"name":"Q-J-T suited (w/ one High Pair penalty*)", "pays": 1.543000, "test": ["Qh","Jh","Th","Jc","4s"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":12}],
+			"penalties":{"high_pair":1}
+		},
+		{"name":"K-Q-J suited (w/ one Straight penalty*)", "pays": 1.538400, "test": ["Kh","Qh","Jh","Tc","4c"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":13}],
+			"penalties":{"straight":1}
+		},
+		{"name":"K-Q-J suited (w/ one High Pair penalty*)", "pays": 1.536500, "test": ["Kh","Qh","Jh","Js","3s"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":13}],
+			"penalties":{"high_pair":1}
+		},
+		{"name":"Four to a Flush, 3 High Cards (w/ no penalty*)", "pays": 1.531900, "test": ["Ac","Qc","Jc","3c","2h"],
+			"count":4, "filters":["flush", {"fn":"high_card", "count":3}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"Q-J-T suited (w/ one Flush penalty*)", "pays": 1.526400, "test": ["Qh","Jh","Th","4h","3c"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":12}],
+			"penalties":{"flush":1}
+		},
+		{"name":"Four to a Flush, 3 High Cards (w/ 1 HP penalty*)", "pays": 1.510600, "test": ["Ac","Qc","Jc","3c","Jh"],
+			"count":4, "filters":["flush", {"fn":"high_card", "count":3}],
+			"penalties":{"high_pair":1}
+		},
+		{"name":"Q-J-T suited (w/ any two penalties*)", "pays": 1.489400, "test": ["Qs","Js","Ts","Kh","Jc"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":12}],
+			"penalties":{"any_count":2}
+		},
+		{"name":"K-Q-J suited (w/ any two penalties*)", "pays": 1.478300, "test": ["Kh","Qh","Jh","Jc","Ts"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":13}],
+			"penalties":{"any_count":2}
+		},
+		{"name":"K-Q-T suited, K-J-T suited (w/ no penalty*)", "pays": 1.475500, "test": ["Kh","Qh","Th","4c","3c"],
+			"count":3, "filters":["flush", {"fn":"contains_multi", "rank_sets":[[10,12,13],
+				[10,11,13]]}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"Four to a Flush, 2 High Cards (w/ no penalty*)", "pays": 1.468100, "test": ["Kh","Jh","7h","5h","2c"],
+			"count":4, "filters":["flush", {"fn":"high_card", "count":2}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"A-K-Qs, A-K-Js, A-Q-Js (w/ no penalty*)", "pays": 1.466200, "test": ["Ac","Kc","Jc","2h","3h"],
+			"count":3, "filters":["flush", {"fn":"contains_multi", "rank_sets":[[12,13,14], [11,13,14], [11,12,14]]}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"Pair of Jacks, Queens, Kings", "pays": 1.458200, "test": ["Jc","Js","2h","4c","8s"],
+			"count":2, "filters":[{"fn":"pair", "ranks":[11,12,13]}]
+		},
+		{"name":"K-Q-Ts, K-J-Ts (w/ one Straight penalty*)", "pays": 1.454200, "test": ["Kh","Qh","Th","Jc","2c"],
+			"count":3, "filters": ["flush", {"fn":"contains_multi", "rank_sets":[[10,12,13], [10,11,13]]}],
+			"penalties":{"straight":1}
+		},
+		{"name":"A-K-Qs, A-K-Js, A-Q-Js (w/ one Straight penalty*)", "pays": 1.445000, "test": ["Ac","Kc","Qc","Jh","2h"],
+			"count":3, "filters":["flush", {"fn":"contains_multi", "rank_sets":[[12,13,14], [11,13,14], [11,12,14]]}],
+			"penalties":{"straight":1}
+		},
+		{"name":"Four to a Flush, One High Card", "pays": 1.404200, "test": ["Ac","8c","7c","3c","6h"],
+			"count":4, "filters":["flush", "high_card"]
+		},
+		{"name":"K-Q-T suited, K-J-T suited (w/ two penalties*)", "pays": 1.395900, "test": ["Kh","Qh","Th","Jc","Qc"],
+			"count":3, "filters":["flush", {"fn":"contains_multi", "rank_sets":[[10,12,13], [10,11,13]]}],
+			"penalties":{"any_count":2}
+		},
+		{"name":"A-K-Ts, A-Q-Ts, A-J-Ts(w/ no penalty*)", "pays": 1.366300, "test": ["Ac","Kc","Tc","2h","3h"],
+			"count":3, "filters":["flush", {"fn":"contains_multi", "rank_sets":[[10,13,14], [10,12,14], [10,11,14]]}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"Four to a flush, No High Cards", "pays": 1.340400, "test": ["9c","7c","4c","2c","8s"],
+			"count":4, "filters":["flush", {"fn":"high_card", "count":0}]
+		},
+		{"name":"A-K-Ts, A-Q-Ts, A-J-Ts (w/ one St. penalty*)", "pays": 1.339500, "test": ["Ac","Kc","Tc","Jh","2s"],
+			"count":3, "filters":["flush", {"fn":"contains_multi", "rank_sets":[[10,13,14], [10,12,14], [10,11,14]]} ],
+			"penalties":{"straight":1}
+		},
+		{"name":"Open Four to a Straight", "pays": 0.914900, "test": ["Jc","Ts","9h","8c","2h"],
+			"count":4, "filters":["open_straight"]
+		},
+		{"name":"Pair of Twos, Threes, Fours", "pays": 0.826600, "test": ["2c","2h","7s","8c","Jh"],
+			"count":2, "filters":[{"fn":"pair", "ranks":[2,3,4]}]
+		},
+		{"name":"J-T-9 suited", "pays": 0.782600, "test": ["Jc","Tc","9c","4h","3h"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":11}]
+		},
+		{"name":"Q-J-9 suited", "pays": 0.776100, "test": ["Qc","Jc","9c","4h","3h"],
+			"count":3, "filters":["flush", {"fn":"contains", "ranks":[9,11,12]}]
+		},
+		{"name":"Pair of Fives through Tens", "pays": 0.743400, "test": ["5c","5h","Js","8d","2h"],
+			"count":2, "filters":[{"fn":"pair", "ranks":[5,6,7,8,9,10]}]
+		},
+		{"name":"Three to a Straight Flush, Open, No High Cards", "pays": 0.685500, "test": ["4c","5c","6c","Th","9h"],
+			"count":3, "filters":["flush","open_straight",{"fn":"high_card","count":0}]
+		},
+		{"name":"A-K-Q-J", "pays": 0.678900, "test": ["Ac","Ks","Jh","Ts","3s"],
+			"count":4, "filters":[{"fn":"contains", "ranks":[11,12,13,14]}]
+		},
+		{"name":"Q-J-8 suited", "pays": 0.664400, "test": ["Qc","Jc","8c","6h","4h"],
+			"count":3, "filters":["flush", {"fn":"contains", "ranks":[8,11,12]}]
+		},
+		{"name":"Q-T-9 suited, J-T-8 suited, J-9-8 suited", "pays": 0.657700, "test": ["Jc","9c","8c","4h","3h"],
+			"count":3, "filters":["flush", {"fn":"contains_multi", "rank_sets":[[9,10,12], [8,10,11], [8,9,11]]}]
+		},
+		{"name":"K-Q-9 suited, K-J-9 suited", "pays": 0.651200, "test": ["Kc","Qc","9c","4h","2h"],
+			"count":3, "filters":["flush", {"fn":"contains_multi", "rank_sets":[[9,12,13], [9,11,13]]}]
+		},
+		{"name":"Four to a Straight, Inside, Three High Cards", "pays": 0.617000, "test": ["Qc","Js","Ts","8d","2h"],
+			"count":4, "filters":["inside_straight", {"fn":"high_card", "count":3}]
+		},
+		{"name":"Q-J suited (w/ no or one penalty*)", "pays": 0.587100, "test": ["Qc","Jc","4h","8s","2h"],
+			"count":2, "filters": [{"fn":"straight_flush", "to":12}],
+			"penalties": {"any_count":[0,1]}
+		},
+		{"name":"K-Q suited, K-J suited (w/ no penalty*)", "pays": 0.584500, "test": ["Kc","Qc","8s","4h","2s"],
+			"count":2, "filters": ["flush", {"fn":"contains_multi", "rank_sets":[[12,13], [11,13]]}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"Q-J suited (w/ two penalties*)", "pays": 0.577200, "test": ["Qs","Js","Th","6c","4s"],
+			"count":2, "filters": [{"fn":"straight_flush", "to":12}],
+			"penalties":{"any_count":2}
+		},
+		{"name":"3 to a St. Flush, 1 Gap, 0 Hi Cards (no penalty*)", "pays": 0.572600, "test": ["4h","5h","7h","9c","Tc"],
+			"count":3, "filters":["flush", "inside_straight", {"fn":"high_card", "count":0}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"A-Ks, A-Qs, A-Js (w/ no penalty*)", "pays": 0.569200, "test": ["Ac","Kc","6s","9d","2h"],
+			"count":2, "filters": ["flush", {"fn":"contains_multi", "rank_sets":[[13,14], [12,14], [11,14]]}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"3 to a St. Flush, 2 Gaps, 1 Hi Card (no penalty*)", "pays": 0.567100, "test": ["4h","6h","8h","Jc","2s"],
+			"count":3, "filters": ["flush", {"fn":"inside_straight", "holes":2}, {"fn":"high_card", "count":1}],
+			"penalties":{"any_count":0},
+			"_comment": "FIXME: this wont' match"
+		},
+		{"name":"K-Qs, K-Js (w/ one Flush penalty*)", "pays": 0.565000, "test": ["Ks","Qs","8s","6h","2h"],
+			"count":2, "filters": ["flush", {"fn":"contains_multi", "rank_sets":[[12,13], [11,13]]}],
+			"penalties":{"flush":1}
+		},
+		{"name":"Q-J suited (w/ three penalties*)", "pays": 0.565000, "test": ["Qs","Js","Tc","8c","2s"],
+			"count":2, "filters":["flush", {"fn":"contains", "ranks":[11,12]}],
+			"penalties":{"any_count":3}
+		},
+		{"name":"K-Qs, K-Js (w/ one or two Straight penalties*)", "pays": 0.564200, "test": ["Ks","Qs","Jc","9c","2h"],
+			"count":2, "filters": ["flush", {"fn":"contains_multi", "rank_sets":[[12,13], [11,13]]}],
+			"penalties":{"straight":[1,2]}
+		},
+		{"name":"Three to a Flush, Two High Cards", "pays": 0.560600, "test": ["As","Js","3s","5c","9c"],
+			"count":3, "filters":["flush", {"fn":"high_card", "count":2}]
+		},
+		{"name":"A-Ks, A-Qs, A-Js (w/ one Straight penalty*)", "pays": 0.559600, "test": ["As","Ks","Tc","2h","6h"],
+			"count":2, "filters": ["flush", {"fn":"contains_multi", "rank_sets":[[13,14], [12,14], [11,14]]}],
+			"penalties":{"straight":1}
+		},
+		{"name":"K-Qs, K-Js (w/ 1 St. penalty + 1 Flush penalty*)", "pays": 0.558200, "test": ["Ks","Qs","Tc","6s","4d"],
+			"count":2, "filters": ["flush", {"fn":"contains_multi", "rank_sets":[[12,13], [11,13]]}],
+			"penalties":{"flush":1, "straight":1}
+		},
+		{"name":"3 to a St. Flush, 1 Gap, 0 Hi Cards (St. penalty*)", "pays": 0.557800, "test": ["5h","6h","8h","9c","2s"],
+			"count":3, "filters": ["flush", {"fn":"inside_straight", "holes":1}, {"fn":"high_card", "count":0}],
+			"penalties":{"straight":1},
+			"_comment": "FIXME: this might match"
+		},
+		{"name":"Four to a Straight, Inside, Two High Cards", "pays": 0.553200, "test": ["Qs","Jd","9c","8h","2s"],
+			"count":4, "filters": ["inside_straight", {"fn":"high_card", "count":2}]
+		},
+		{"name":"K-Qs, K-Js (w/ three penalties*)", "pays": 0.551500, "test": ["Ks","Qs","Th","Td","2s"],
+			"count":2, "filters": ["flush", {"fn":"contains_multi", "rank_sets":[[12,13], [11,13]]}],
+			"penalties":{"any_count":3}
+		},
+		{"name":"3 to a St. Flush, 2 Gaps, 1 High Card (St. penalty*)", "pays": 0.548600, "test": ["8h","Th","Qh","9c","2s"],
+			"count":3, "filters": ["flush", {"fn":"inside_straight", "holes":2}, {"fn":"high_card", "count":1}],
+			"penalties":{"straight":1},
+			"_comment": "FIXME: this might match"
+		},
+		{"name":"K-Q-J", "pays": 0.519900, "test": ["Kh","Qs","Jc","4c","2h"],
+			"count":3, "filters":[{"fn":"straight", "to":13}]
+		},
+		{"name":"J-T suited (w/ no penalty*)", "pays": 0.501100, "test": ["Jc","Tc","6s","4d","2d"],
+			"count":2, "filters":[{"fn":"straight_flush", "to":11}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"Q-J-T", "pays": 0.494000, "test": ["Qc","Jd","Th","7s","2d"],
+			"count":3, "filters":[{"fn":"straight_flush", "to":12}]
+		},
+		{"name":"Four to a Straight, Inside, One High Card", "pays": 0.489400, "test": ["Jc","Ts","9d","7h","2s"],
+			"count":4, "filters": ["inside_straight", {"fn":"high_card", "count":1}]
+		},
+		{"name":"J-T suited (w/ one Flush penalty*)", "pays": 0.481700, "test": ["Js","Ts","6s","4c","2h"],
+			"count":2, "filters":[{"fn":"straight_flush", "to":11}],
+			"penalties":{"flush":1}
+		},
+		{"name":"J-T suited (w/ one or two Straight penalties*)", "pays": 0.474700, "test": ["Js","Ts","8c","7c","2h"],
+			"count":2, "filters":[{"fn":"straight_flush", "to":11}],
+			"penalties":{"straight":[1,2]},
+			"_comment": "FIXME: this probably won't match"
+		},
+		{"name":"Q-J", "pays": 0.474500, "test": ["Qc","Jh","7d","5c","2h"],
+			"count":2, "filters":[{"fn":"contains", "ranks":[11,12]}]
+		},
+		{"name":"9-7-5 suited, 9-6-5 suited", "pays": 0.469900, "test": ["9c","7c","5c","2h","3h"],
+			"count":3, "filters":["flush", {"fn":"contains_multi", "rank_sets":[[5,7,9], [5,6,9]]}]
+		},
+		{"name":"Q-T suited (w/ no penalty*)", "pays": 0.468300, "test": ["Qc","Tc","7s","5h","2s"],
+			"count":2, "filters":["flush", {"fn":"contains", "ranks":[10,12]}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"3 to a St. Flush, 2 Gaps, 0 Hi Cards (no penalty*)", "pays": 0.467200, "test": ["5h","7h","9h","2d","3d"],
+			"count":3, "filters":["flush", {"fn":"inside_straight", "holes":2}, {"fn":"high_card", "count":0}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"J-Ts (w/ 1 Straight penalty + 1 Flush penalty*)", "pays": 0.465200, "test": ["Js","Ts","8c","2s","5h"],
+			"count":2, "filters":["flush", {"fn":"contains", "ranks":[10,11]}],
+			"penalties":{"straight":1, "flush":1}
+		},
+		{"name":"K-Q, K-J (w/ no penalty*)", "pays": 0.462300, "test": ["Ks","Qc","8h","5h","3d"],
+			"count":2, "filters":[{"fn":"contains_multi", "rank_sets":[[12,13], [11,13]]}],
+			"penalties":{"any_count":0}
+		},
+		{"name":"Three to a Flush, One High Card", "pays": 0.459800, "test": ["Js","8s","4s","3c","2c"],
+			"count":3, "filters":["flush", {"fn":"high_card", "count":1}]
+		},
+		{"name":"J-T suited (w/ three penalties*)", "pays": 0.458800, "test": ["Js","Ts","7c","Ad","2s"],
+			"count":2, "filters":["flush", {"fn":"contains", "ranks":[10,11]}],
+			"penalties":{"any_count":3}
+		},
+		{"name":"K-Q, K-J (w/ one Straight penalty*)", "pays": 0.457400, "test": ["Kc","Qs","9d","5h","2c"],
+			"count":2, "filters":[{"fn":"contains_multi", "rank_sets": [[12,13], [11,13]]}],
+			"penalties":{"straight":1}
+		},
+		{"name":"Ace (w/ no flush penalty*)", "pays": 0.455200, "test": ["Ad","Tc","7s","4s","2h"],
+			"count":1, "filters":[{"fn":"contains", "ranks":[14]}],
+			"penalties":{"flush":0}
+		},
+		{"name":"Ace (w/ one flush penalty + no 2, 3, 4 or 5)", "pays": 0.449900, "test": ["Ah","9h","Jc","7s","6d"],
+			"count":1, "filters":[{"fn":"contains", "ranks":[14]}],
+			"penalties":{"flush":1, "kicker":[2,3,4,5]}
+		},
+		{"name":"A-K, A-Q, A-J", "pays": 0.449300, "test": ["Ac","Kh","9d","7c","4s"],
+			"count":2, "filters": [{"fn":"contains_multi", "rank_sets": [[13,14], [12,14], [11,14]]}]
+		},
+		{"name":"K-T suited", "pays": 0.448700, "test": ["Kc","Tc","7s","5d","2d"],
+			"count":2, "filters":["flush", {"fn":"contains", "ranks":[10,13]}]
+		},
+		{"name":"Ace (w/ one flush penalty*)", "pays": 0.448700, "test": ["Ah","Th","7s","5c","2d"],
+			"count":1, "filters":[{"fn":"contains", "ranks":[14]}],
+			"penalties":{"flush":1}
+		},
+		{"name":"Jack (w/ no flush penalty*)", "pays": 0.445100, "test": ["Jd","9s","7c","4h","2h"],
+			"count":1, "filters":[{"fn":"contains", "ranks":[11]}],
+			"penalties":{"flush":0}
+		},
+		{"name":"3 to a St. Flush, 2 Gaps, 0 Hi Cards (St. penalty*)", "pays": 0.443100, "test": ["4h","6h","8h","7c","Td"],
+			"count":3, "filters":["flush", {"fn":"inside_straight", "holes":2}, {"fn":"high_card", "count":0}],
+			"penalties":{"straight":0}
+		},
+		{"name":"Queen", "pays": 0.434100, "test": ["Qc","9d","7d","4s","2s"],
+			"count":1, "filters":[{"fn":"contains", "ranks":[12]}]
+		},
+		{"name":"King", "pays": 0.431000, "test": ["Kh","Ts","8d","5d","2c"],
+			"count":1, "filters":[{"fn":"contains", "ranks":[13]}]
+		},
+		{"name":"Jack (w/ one Flush penalty*)", "pays": 0.430600, "test": ["Jd","8d","5c","3s","2s"],
+			"count":1, "filters":[{"fn":"contains", "ranks":[11]}],
+			"penalties":{"flush":1}
+		},
+		{"name":"Four to a Straight, Inside, no High Cards", "pays": 0.425500, "test": ["5d","6c","7s","9h","2d"],
+			"count":4, "filters":["inside_straight", {"fn":"high_card", "count":0}]
+		},
+		{"name":"Three to a Flush, no High Cards", "pays": 0.360800, "test": ["Th","7h","5h","3s","2s"],
+			"count":3, "filters":["flush", {"fn":"high_card", "count":0}]
+		}
+	]
+}
