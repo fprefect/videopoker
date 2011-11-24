@@ -19,7 +19,7 @@
 		{"name":"Pat Straight Flush", "pays": 50.000000, "test": ["6h","7h","8h","9h","Th"],
 			"filters":["straight_flush"]
 		},
-		{"name":"Royal Flush Draw", "pays": 18.638300, "test": ["Th","Jh","Qh","Kh","4h"], "debug":true,
+		{"name":"Royal Flush Draw", "pays": 18.638300, "test": ["Th","Jh","Qh","Kh","4h"], 
 			"count":4, "filters":["straight_flush", {"fn":"doesnt_contain", "ranks":[2,3,4,5,6,7,8,9]}]
 		},
 		{"name":"Three of a Kind Aces", "pays": 10.114700, "test": ["Ac","Ad","Ah","Js","8c"],
