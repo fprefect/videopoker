@@ -6,7 +6,7 @@ correctly at this point.
 
 videopoker.py / DoubleBonusPoker.py uses the stats table from
 [videoballer.com](vb_dblbonus). videopoker.py is runnable, it tests the [json
-data table](./data/).
+data table](videopoker/data/).
 
 Most new work is in odds.py. You can run it and get some debugging output. 
 
