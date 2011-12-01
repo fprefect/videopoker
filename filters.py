@@ -41,16 +41,23 @@ def open_straight(cards):
 		return False
 	return True
 
-def inside_straight(cards, holes=1):
-	holes_found = 0
+def inside_straight_holes(cards):
+	holes_found = []
 	ranks = videopoker.Hand(cards).ranks()
 	prev_rank = ranks[0]
 	for i in range(1, len(ranks)):
 		if prev_rank == ranks[i]:
 			return False
-		holes_found += ranks[i] - prev_rank - 1
+		if ranks[i] - prev_rank - 1 > 0:
+			holes_found.extend(range(prev_rank+1, ranks[i]))
 		prev_rank = ranks[i]
-	return holes_found == holes
+	return holes_found
+
+def inside_straight(cards, holes=1):
+	holes_list = inside_straight_holes(cards)
+	if holes_list == False:
+		return False
+	return len(inside_straight_holes(cards)) == holes
 
 def ofakind(cards, count=None, ranks=None):
 	""" returns true if cards match <count> of a kind and the matched is in ranks """
@@ -96,7 +103,7 @@ def high_card(cards, count=1):
 	return high_card_count(cards) == count
 
 def contains(cards, ranks):
-	return len(ranks) < len(set(ranks) & set([c.rank for c in cards]))
+	return len(ranks) <= len(set(ranks) & set([c.rank for c in cards]))
 
 def contains_multi(cards, rank_sets):
 	return 0 < len(filter(lambda rs: contains(cards, rs), rank_sets))

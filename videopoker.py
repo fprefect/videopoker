@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
-from itertools import combinations
+from itertools import combinations, product
 from functools import partial
+import random
 import simplejson as json
 import filters as HandFilters
+
 
 class Card:
 	""" A standard playing card. Ranks are range 2 - 14 and suits are in c, d, h, s """
@@ -58,13 +60,37 @@ class Card:
 		return self == other or self > other
 
 
+class Deck:
+
+	def __init__(self, shuffle=False):
+		self.cards = None
+		self.reset()
+		if shuffle:
+			self.shuffle()
+
+	def reset(self):
+		self.cards = [Card(x[0],x[1]) for x in product(xrange(2,15), 'cdhs')]
+
+	def shuffle(self):
+		random.shuffle(self.cards)
+
+	def deal(self, num_cards):
+		cards = self.cards[0:num_cards]
+		del self.cards[0:num_cards]
+		return cards
+
+	def combinations(self, k):
+		return combinations(self.cards, k)
+
 class Hand:
 	""" A collection of Cards """
-	def __init__(self, cards=None, cards_raw=None):
-		if cards and cards_raw:
-			raise ValueError("Cannot set Hand with both cards and cards_raw")
+	def __init__(self, cards=None, cards_raw=None, cards_string=None):
+		assert len(filter(None, [cards, cards_raw, cards_string])) == 1
 
-		if(cards_raw):
+		if cards_string:
+			cards_raw = cards_string.split(',')
+
+		if cards_raw:
 			cards = []
 			for s in cards_raw:
 				r = s[0:-1]
@@ -131,15 +157,35 @@ class HandPenalties:
 	def straight_penalties(self, cards, discard):
 		""" Straight (St.) penalty cards mean cards that interfere w/ a hand's possibility
 			of making a straight. """
-		if not HandFilters.straight(cards):
+
+		discard_ranks = Hand(discard).ranks()
+		if self.debug:
+			print "straight_penalties(", cards, discard, ")", discard_ranks
+
+		holes = HandFilters.inside_straight_holes(cards)
+		if len(holes) > 2:
 			return 0
+
+		if self.debug:
+			print "Holes", holes
+
+		penalties = len([1 for r in holes if r in discard_ranks])
+		if self.debug:
+			print "straight penalties after holes:", penalties
+				
 		low = cards[0].rank - 1
 		high = cards[-1].rank + 1
-		penalties = 0
-		if low >= 2 and low in Hand(discard).ranks():
+
+		if low >= 2 and low in discard_ranks:
 			penalties += 1
-		if high <= 14 and high in Hand(discard).ranks():
+			if self.debug:
+				print "straight penalty low =", low, " discard_ranks = ", discard_ranks, penalties
+
+		if high <= 14 and high in discard_ranks:
 			penalties += 1
+			if self.debug:
+				print "straight penalty high =", high, " discard_ranks = ", discard_ranks, penalties
+
 		return penalties
 
 	def flush_penalties(self, cards, discard):
@@ -176,22 +222,21 @@ class HandPenalties:
 			if kp > 0:
 				return False
 
-		if self.straight != None or self.any_count != None:
-			st = self.straight_penalties(subhand, discard)
-
-		if self.flush != None or self.any_count != None:
-			fl = self.flush_penalties(subhand, discard)
-
-		if self.high_pair != None or self.any_count != None:
-			hp = self.high_pair_penalties(subhand, discard)
+		st = self.straight_penalties(subhand, discard)
+		fl = self.flush_penalties(subhand, discard)
+		hp = self.high_pair_penalties(subhand, discard)
+		total = st + fl + hp
 
 		if self.debug:
 			print "Penalties: straight: %d/%s, flush: %d/%s, high pair: %d/%s, any count: %d/%s" % (
-				st, str(self.straight), fl, str(self.flush), hp, str(self.high_pair), (st+fl+hp), str(self.any_count)
+				st, str(self.straight), fl, str(self.flush), hp, str(self.high_pair), total, str(self.any_count)
 			)
 
 		if self.any_count != None:
-			return self.any_count == (st + fl + hp)
+			try:
+				return total in self.any_count
+			except TypeError:
+				return total == self.any_count
 
 		if st != self.straight:
 			return False
@@ -254,7 +299,11 @@ class HandPattern:
 				print subhands
 
 		if self.penalties:
+			if self.debug:
+				print "pre penalties", subhands
 			subhands = filter(partial(self.penalties.match, hand), subhands)
+			if self.debug:
+				print "post penalties", subhands
 
 		return subhands
 
@@ -308,10 +357,12 @@ class VideoPokerGame:
 			
 		for p in self.patterns:
 			hp = HandPattern(**p)
+
 			if debug == True or debug == hp.name:
 				hp.debug = debug
 				if "penalties" in p:
 					p["penalties"].debug = True
+
 			m = hp.matches(hand)
 			if len(m) > 0:
 				plays.append((p, m))
@@ -328,7 +379,8 @@ class VideoPokerGame:
 		if pattern_id:
 			start = pattern_id
 			end = start + 1
-			debug = self.patterns[start]["name"]
+			if debug:
+				debug = self.patterns[start]["name"]
 		else:
 			start = 0
 			end = len(self.patterns)
@@ -362,6 +414,13 @@ class VideoPokerGame:
 
 
 if __name__ == "__main__":
+	import sys
+
 	game = VideoPokerGame("data/DoubleBonusPoker-10-7.json")
-	game.test(25, debug=True)
+	pattern_id = None
+	debug = False
+	if len(sys.argv) > 1:
+		pattern_id = int(sys.argv[1])
+		debug = True
+	game.test(pattern_id=pattern_id, debug=debug)
 
